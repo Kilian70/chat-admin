@@ -57,8 +57,17 @@ Am 22.09.2026 wurde das Modul lokal auf HumHub 1.18.5 mit Messenger 3.3.13 getes
 - Nach der Entfernung erschien der Chat für die Testperson nicht mehr. Der zuvor kopierte direkte Anhangslink wurde mit „Unzureichende Rechte“ abgewiesen. Die Berechtigungsprüfung von Messenger und HumHub lieferte für Nachricht und Anhang vor der Entfernung Zugriff und danach keinen Zugriff mehr.
 - In den lokalen HumHub-Protokollen wurden bei diesen Tests keine neuen Fehler gefunden.
 
-Auf einer getrennten lokalen Installation mit HumHub 1.19.0-beta.3 und Messenger 3.4.5 wurden Anmeldung als Systemadministrator, Messenger-Aufruf, Menüeintrag „Teilnehmer verwalten“ und die Teilnehmerseite eines bestehenden Testchats erfolgreich geprüft. Die Seite schützte den eigenen Zugang und zeigte das bestehende Audit an. Eine vollständige Sicherheitsprüfung der Entfernungsfunktion auf 1.19 wurde noch nicht durchgeführt.
+Auf einer getrennten lokalen Installation mit HumHub 1.19.0-beta.3 und Messenger 3.4.5 wurden Anmeldung als Systemadministrator, Messenger-Aufruf, Menüeintrag „Teilnehmer verwalten“ und die Teilnehmerseite eines Testchats erfolgreich geprüft. Die Seite schützte den eigenen Zugang und zeigte das bestehende Audit an.
 
-Weiterhin offen sind manipulierte POST-Parameter über HTTP, die vollständigen Entfernungstests auf HumHub 1.19 sowie die Prüfung auf einem iPhone. Die lokale Prüfung ist keine Produktionsfreigabe.
+- Manipulierte HTTP-Aufrufe: GET auf die Entfernen-Aktion lieferte 405, POST ohne CSRF-Token 400; eigenes Konto, unbekannte Person, ungültige Benutzer-ID, unbekannte Chat-ID und bereits entfernte Person wurden mit 403 abgewiesen.
+- Eine gültige Entfernung lieferte eine Weiterleitung und genau einen zusätzlichen Audit-Eintrag. Der Chat blieb bestehen; ein zweiter Entfernungsversuch wurde mit 403 abgewiesen.
+- Eine erneute Einladung gab der Testperson wieder Zugriff auf den Anhang (HTTP 200). Nach erneuter Entfernung wurde der direkte Anhangslink für sie mit HTTP 401 abgewiesen; der verbleibende Administrator konnte ihn weiterhin öffnen (HTTP 200). Die Verwaltungsseite blieb für die normale Testperson gesperrt (HTTP 403).
+- Während der Administrator einen Benutzer impersonierte, blieb die Verwaltungsseite gesperrt (HTTP 403); der Chat war ebenfalls gesperrt und der Verwaltungsmenüpunkt nicht sichtbar.
+- Zwei gleichzeitige Entfernungsanfragen ergaben eine Weiterleitung und eine Ablehnung (HTTP 302/403) sowie genau einen weiteren Audit-Eintrag.
+- In den lokalen HumHub-Protokollen wurden bei diesen Tests keine neuen Fehler gefunden.
+
+Ein vom Betreiber bereitgestellter iPhone-Screenshot zeigt die Teilnehmerseite mit lesbarer Tabelle sowie sichtbaren Schaltflächen „Entfernen“ und „Zurück zum Chat“. Die Bedienung der Entfernung auf dem iPhone wurde damit nicht geprüft; der Screenshot weist die HumHub-Version der abgebildeten Installation nicht nach.
+
+Weiterhin offen sind die Entfernung per iPhone, die Prüfung eines Administrators außerhalb des Chats und Tests mit deaktiviertem oder nicht unterstütztem Messenger auf HumHub 1.19. Die lokale Prüfung ist keine Produktionsfreigabe.
 
 Zusätzlich prüft `php tests/run.php` neun reine Berechtigungsfälle; `php tests/access.php` prüft zwölf Versions- und Zugriffsfälle mit Test-Doubles. Alle PHP-Dateien bestanden die Syntaxprüfung.
