@@ -44,4 +44,19 @@ Menü-Widget, Teilnehmerrelation, Löschereignisse und Nachrichten-Zugriffsprüf
 - HumHub 1.19: während Benutzer-Impersonation müssen Menü und direkter Zugriff gesperrt bleiben.
 - iPhone: Menü und Teilnehmerformular prüfen.
 
-Lokal: `php tests/run.php` prüft neun reine Berechtigungsfälle; `php tests/access.php` prüft Versionsfreigabe, Administratorzugriff und Impersonation mit Test-Doubles. PHP-Syntax wurde kontrolliert. **Noch kein Live-/Integrationstest mit einer HumHub-Installation durchgeführt; keine Produktionsfreigabe.**
+## Bisherige Testergebnisse
+
+Am 22.09.2026 wurde das Modul lokal auf HumHub 1.18.5 mit Messenger 3.3.13 getestet:
+
+- Aktivierung beider Module und Aufruf der Teilnehmerverwaltung aus einem Testchat als Systemadministrator erfolgreich; eigener Zugang ist geschützt.
+- Als normale Testperson fehlt der Menüpunkt. Ein direkter Aufruf der Teilnehmerverwaltung wird mit „Forbidden“ abgewiesen.
+- Ein GET-Aufruf der Entfernen-Aktion wird als unzulässige Methode abgewiesen; eine nicht vorhandene Chat-ID liefert „Not Found“. Anonyme GET- und POST-Aufrufe wurden mit HTTP 403 abgewiesen.
+- Ein angemeldeter POST ohne CSRF-Token wurde abgewiesen. Direkte Dienstaufrufe mit eigenem Konto, bereits entfernter oder unbekannter Person, unbekannter Chat-ID und normaler Benutzerrolle wurden abgewiesen; das Audit blieb dabei unverändert.
+- Eine Testperson wurde zweimal entfernt, mit bewusster Wiedereinladung dazwischen. Pro Entfernung entstand genau ein Audit-Eintrag. Chat, Nachricht und Anhang blieben für den Administrator erhalten.
+- Bei zwei gleichzeitig gestarteten Entfernungsversuchen war einer erfolgreich und einer wurde abgewiesen; es kam nur ein Audit-Eintrag hinzu.
+- Nach der Entfernung erschien der Chat für die Testperson nicht mehr. Der zuvor kopierte direkte Anhangslink wurde mit „Unzureichende Rechte“ abgewiesen. Die Berechtigungsprüfung von Messenger und HumHub lieferte für Nachricht und Anhang vor der Entfernung Zugriff und danach keinen Zugriff mehr.
+- In den lokalen HumHub-Protokollen wurden bei diesen Tests keine neuen Fehler gefunden.
+
+Weiterhin offen sind manipulierte POST-Parameter über HTTP, ein Test mit HumHub 1.19/Messenger 3.4.5 sowie die Prüfung auf einem iPhone. Die lokale Prüfung ist keine Produktionsfreigabe.
+
+Zusätzlich prüft `php tests/run.php` neun reine Berechtigungsfälle; `php tests/access.php` prüft zwölf Versions- und Zugriffsfälle mit Test-Doubles. Alle PHP-Dateien bestanden die Syntaxprüfung.
