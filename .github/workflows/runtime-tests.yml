@@ -1,0 +1,45 @@
+name: HumHub compatibility smoke tests
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '29 4 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  compatibility:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - humhub: '1.18.5'
+            ref: 'v1.18.5'
+            php: '8.2'
+          - humhub: '1.19.0-beta.3'
+            ref: 'v1.19.0-beta.3'
+            php: '8.3'
+    steps:
+      - name: Check out module
+        uses: actions/checkout@v5
+        with:
+          path: chat-admin
+      - name: Check out HumHub
+        uses: actions/checkout@v5
+        with:
+          repository: humhub/humhub
+          ref: ${{ matrix.ref }}
+          path: humhub
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer:v2
+          coverage: none
+      - name: Install HumHub dependencies
+        working-directory: humhub
+        run: composer install --no-interaction --prefer-dist --no-progress --no-scripts
+      - name: Run compatibility smoke test
+        run: php chat-admin/tests/humhub-compatibility.php humhub "${{ matrix.humhub }}"
