@@ -1,0 +1,36 @@
+name: Quality checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.2', '8.3']
+    steps:
+      - uses: actions/checkout@v5
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+      - name: Validate module.json
+        run: |
+          php -r '
+            $data = json_decode(file_get_contents("module.json"), true, 512, JSON_THROW_ON_ERROR);
+            foreach (["id","name","version","humhub"] as $key) {
+              if (!array_key_exists($key, $data)) { fwrite(STDERR, "Missing module.json field: $key\n"); exit(1); }
+            }
+            if (empty($data["humhub"]["minVersion"])) { fwrite(STDERR, "Missing humhub.minVersion\n"); exit(1); }
+            if (!preg_match("/^\\d+\\.\\d+\\.\\d+(?:[-+][0-9A-Za-z.-]+)?$/", $data["version"])) { fwrite(STDERR, "Invalid version\n"); exit(1); }
+          '
+      - name: Lint PHP files
+        run: find . -path './.git' -prune -o -name '*.php' -print0 | xargs -0 -r -n1 php -l
