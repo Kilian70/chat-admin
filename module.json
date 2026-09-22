@@ -1,0 +1,9 @@
+{
+  "id": "chat-admin",
+  "name": "Chat-Teilnehmerverwaltung",
+  "description": "Systemadministratoren verwalten Teilnehmer ihrer eigenen Messenger-Unterhaltungen.",
+  "version": "0.1.1",
+  "humhub": {"minVersion": "1.18.1"},
+  "licence": "AGPL-3.0-or-later",
+  "keywords": ["messenger", "chat", "administration"]
+}
