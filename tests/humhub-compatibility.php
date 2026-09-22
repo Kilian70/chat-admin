@@ -16,10 +16,10 @@ require $humhubRoot . '/protected/vendor/yiisoft/yii2/Yii.php';
 spl_autoload_register(static function (string $class) use ($moduleRoot, $humhubRoot): void {
     $prefix = 'kilian\\chatadmin\\';
     if (str_starts_with($class, $prefix)) {
-        $relative = str_replace('\\\\', '/', substr($class, strlen($prefix)));
+        $relative = str_replace('\\', '/', substr($class, strlen($prefix)));
         $path = $moduleRoot . '/' . $relative . '.php';
-    } elseif (str_starts_with($class, 'humhub\\\\')) {
-        $relative = str_replace('\\\\', '/', substr($class, strlen('humhub\\\\')));
+    } elseif (str_starts_with($class, 'humhub\\')) {
+        $relative = str_replace('\\', '/', substr($class, strlen('humhub\\')));
         $path = $humhubRoot . '/protected/humhub/' . $relative . '.php';
     } else {
         return;
