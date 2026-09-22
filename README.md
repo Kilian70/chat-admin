@@ -57,6 +57,8 @@ Am 22.09.2026 wurde das Modul lokal auf HumHub 1.18.5 mit Messenger 3.3.13 getes
 - Nach der Entfernung erschien der Chat für die Testperson nicht mehr. Der zuvor kopierte direkte Anhangslink wurde mit „Unzureichende Rechte“ abgewiesen. Die Berechtigungsprüfung von Messenger und HumHub lieferte für Nachricht und Anhang vor der Entfernung Zugriff und danach keinen Zugriff mehr.
 - In den lokalen HumHub-Protokollen wurden bei diesen Tests keine neuen Fehler gefunden.
 
-Weiterhin offen sind manipulierte POST-Parameter über HTTP, ein Test mit HumHub 1.19/Messenger 3.4.5 sowie die Prüfung auf einem iPhone. Die lokale Prüfung ist keine Produktionsfreigabe.
+Auf einer getrennten lokalen Installation mit HumHub 1.19.0-beta.3 und Messenger 3.4.5 wurden Anmeldung als Systemadministrator, Messenger-Aufruf, Menüeintrag „Teilnehmer verwalten“ und die Teilnehmerseite eines bestehenden Testchats erfolgreich geprüft. Die Seite schützte den eigenen Zugang und zeigte das bestehende Audit an. Eine vollständige Sicherheitsprüfung der Entfernungsfunktion auf 1.19 wurde noch nicht durchgeführt.
+
+Weiterhin offen sind manipulierte POST-Parameter über HTTP, die vollständigen Entfernungstests auf HumHub 1.19 sowie die Prüfung auf einem iPhone. Die lokale Prüfung ist keine Produktionsfreigabe.
 
 Zusätzlich prüft `php tests/run.php` neun reine Berechtigungsfälle; `php tests/access.php` prüft zwölf Versions- und Zugriffsfälle mit Test-Doubles. Alle PHP-Dateien bestanden die Syntaxprüfung.
