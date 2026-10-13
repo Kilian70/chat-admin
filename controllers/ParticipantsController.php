@@ -9,7 +9,7 @@ use Yii;
 use yii\filters\VerbFilter;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
-use yii\web\ServiceUnavailableHttpException;
+use yii\web\HttpException;
 
 class ParticipantsController extends Controller
 {
@@ -36,7 +36,7 @@ class ParticipantsController extends Controller
             throw new ForbiddenHttpException();
         }
         if (!Access::isCompatible() || !Access::auditReady()) {
-            throw new ServiceUnavailableHttpException('Bitte Messenger 3.3.13 oder 3.4.5 und die Chat-Admin-Datenbankmigration prüfen.');
+            throw new HttpException(503, 'Bitte Messenger 3.3.13, 3.4.5 oder 3.4.6 und die Chat-Admin-Datenbankmigration prüfen.');
         }
         return parent::beforeAction($action);
     }

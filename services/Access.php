@@ -24,7 +24,7 @@ final class Access
     {
         $mail = Yii::$app->getModule('mail');
         // Fail closed after Messenger updates until that version is verified.
-        return $mail !== null && in_array($mail->getVersion(), ['3.3.13', '3.4.5'], true);
+        return $mail !== null && in_array($mail->getVersion(), ['3.3.13', '3.4.5', '3.4.6'], true);
     }
 
     public static function auditReady(): bool

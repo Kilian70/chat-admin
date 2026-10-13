@@ -31,12 +31,15 @@ class AppDouble {
 require dirname(__DIR__) . '/services/Access.php';
 use kilian\chatadmin\services\Access;
 
+$count = 0;
 function check(bool $actual, bool $expected, string $label): void {
+    global $count;
     if ($actual !== $expected) throw new RuntimeException($label);
+    $count++;
 }
 Yii::$app = new AppDouble();
 Yii::$app->user = new CurrentUserDouble();
-foreach (['3.3.13', '3.4.5'] as $version) {
+foreach (['3.3.13', '3.4.5', '3.4.6'] as $version) {
     Yii::$app->mail = new MailDouble($version);
     check(Access::isCompatible(), true, 'supported version ' . $version);
     check(Access::isAdmin(), true, 'normal admin ' . $version);
@@ -50,7 +53,7 @@ Yii::$app->user->identity->admin = true;
 Yii::$app->user->isGuest = true;
 check(Access::isAdmin(), false, 'guest');
 Yii::$app->user->isGuest = false;
-Yii::$app->mail = new MailDouble('3.4.6');
+Yii::$app->mail = new MailDouble('3.4.7');
 check(Access::isCompatible(), false, 'unreviewed version');
 Yii::$app->mail = null;
 check(Access::isCompatible(), false, 'missing Messenger');
@@ -59,4 +62,6 @@ Yii::$app->mail = new MailDouble('3.3.13');
 check(Access::isAdmin(), true, 'legacy supported session');
 Yii::$app->mail = new MailDouble('3.4.5');
 check(Access::isAdmin(), false, 'new Messenger without impersonation interface');
-echo "12 Versions- und Zugriffsprüfungen bestanden.\n";
+Yii::$app->mail = new MailDouble('3.4.6');
+check(Access::isAdmin(), false, 'Messenger 3.4.6 without impersonation interface');
+echo "$count Versions- und Zugriffsprüfungen bestanden.\n";
