@@ -506,3 +506,17 @@ und Deployment bleiben ausgeschlossen. Der übertragene Commit wird anschließen
 mit dem Remote-Branch verglichen.
 
 Branch: https://github.com/Kilian70/chat-admin/tree/feature/humhub-119-skill-pilot
+
+## Release 0.1.2 (13.10.2026)
+
+Auf ausdrücklichen Nutzerauftrag wird der funktional geprüfte Stand als
+veröffentlichte Testversion v0.1.2 bereitgestellt, entsprechend dem bisherigen
+Pre-release v0.1.1. Grundlage ist Branch feature/humhub-119-skill-pilot; main
+wird nicht zusammengeführt. Nur Modulversion, README-Titel, Changelog und dieser
+Release-Vermerk wurden für die Veröffentlichung angepasst. PHP-Funktionscode,
+Freigaben und Migrationen entsprechen dem zuvor getesteten Commit dfd5413843fb5b86053142cbabee737a4758a676.
+
+Erneute Release-Prüfung: Manifest-Version/Mindestversion, PHP-Syntax sowie die
+9 Policy-, 16 Versions-/Zugriffs- und je 18 Sperrprüfungen auf den drei vorbereiteten
+Kernständen. Das ZIP enthält ausschließlich den getaggten Repository-Stand unter
+chat-admin/, keine Git-Metadaten oder temporären Testdateien. Kein Deployment.
