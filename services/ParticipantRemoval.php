@@ -5,7 +5,7 @@ use humhub\modules\mail\models\Message;
 use humhub\modules\mail\models\UserMessage;
 use Yii;
 use yii\web\ForbiddenHttpException;
-use yii\web\ServiceUnavailableHttpException;
+use yii\web\HttpException;
 
 final class ParticipantRemoval
 {
@@ -15,7 +15,7 @@ final class ParticipantRemoval
             throw new ForbiddenHttpException();
         }
         if (!Access::isCompatible() || !Access::auditReady()) {
-            throw new ServiceUnavailableHttpException('Messenger-Version oder Protokolltabelle ist nicht bereit.');
+            throw new HttpException(503, 'Messenger-Version oder Protokolltabelle ist nicht bereit.');
         }
         $actorId = (int)Yii::$app->user->id;
         $db = Yii::$app->db;

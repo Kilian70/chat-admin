@@ -21,6 +21,9 @@ jobs:
           - humhub: '1.19.0-beta.3'
             ref: 'v1.19.0-beta.3'
             php: '8.3'
+          - humhub: '1.19.0'
+            ref: 'v1.19.0'
+            php: '8.3'
     steps:
       - name: Check out module
         uses: actions/checkout@v5
@@ -43,3 +46,5 @@ jobs:
         run: composer install --no-interaction --prefer-dist --no-progress --no-scripts
       - name: Run compatibility smoke test
         run: php chat-admin/tests/humhub-compatibility.php humhub "${{ matrix.humhub }}"
+      - name: Run availability regression tests
+        run: php chat-admin/tests/availability.php humhub
