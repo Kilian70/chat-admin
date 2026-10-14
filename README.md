@@ -1,7 +1,8 @@
-# Chat-Teilnehmerverwaltung 0.1.2 – Testversion
+# Chat-Teilnehmerverwaltung 0.1.3 – Testversion
 
-Separates HumHub-Zusatzmodul für Messenger **3.3.13** (HumHub 1.18) sowie **3.4.5** und **3.4.6** (HumHub 1.19). Quellcode-Referenzen des offiziellen Repositorys https://github.com/humhub/mail:
+Separates HumHub-Zusatzmodul für Messenger **3.3.13** und **3.3.15** (HumHub 1.18) sowie **3.4.5** und **3.4.6** (HumHub 1.19). Quellcode-Referenzen des offiziellen Repositorys https://github.com/humhub/mail:
 
+- 3.3.15: `b2b1ead3356d60d6b30805fbfc1ac74c72dfdb62`
 - 3.3.13: `74c5718405e9fa4a1212d1f8fc1bf47661834231`
 - 3.4.5: `33e02e8cf2c0552aa6926b93ca23991b83c24940`
 - 3.4.6: `f1f6af8e2fa19d40d21eace55091122269670552`

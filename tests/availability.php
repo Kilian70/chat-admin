@@ -82,6 +82,8 @@ $cases = [
     ['3.4.5', false, true, false, false, 503],
     ['3.4.6', false, true, false, false, 503],
     ['3.3.13', false, true, false, false, 503],
+    ['3.3.15', false, true, false, false, 503],
+    ['3.3.16', true, true, false, false, 503],
     ['3.4.7', false, false, false, false, 403],
     ['3.4.7', false, true, true, false, 403],
     ['3.4.5', true, true, false, true, 403],
