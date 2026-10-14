@@ -585,3 +585,5 @@ alle PHP-Syntaxprüfungen bestanden. Keine vollständige Web-/Upgrade- oder
 Produktionsprüfung behauptet.
 
 Veröffentlichung 0.1.3 am 14.10.2026 ausdrücklich freigegeben: Commit, Push, Merge und Release; kein Deployment. Nur Versionsmetadaten ergänzt, geprüfter Funktionscode unverändert.
+
+Zentrale Regeln tatsächlich gelesen: humhub-ai-dev Commit 3e9ca012767d0e249aab62f7ba5c48224e4e6b04, AGENTS.md, README.md, START.md, docs/REGELN.md, docs/QUELLEN.md und docs/VERSIONEN.md. Neuere AGENTS.md-Ergänzung aus main unverändert übernommen.
