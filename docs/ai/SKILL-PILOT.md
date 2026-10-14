@@ -520,3 +520,68 @@ Erneute Release-Prüfung: Manifest-Version/Mindestversion, PHP-Syntax sowie die
 9 Policy-, 16 Versions-/Zugriffs- und je 18 Sperrprüfungen auf den drei vorbereiteten
 Kernständen. Das ZIP enthält ausschließlich den getaggten Repository-Stand unter
 chat-admin/, keine Git-Metadaten oder temporären Testdateien. Kein Deployment.
+
+
+## Untersuchung: fehlender Menüpunkt auf HumHub 1.18.6 (14.10.2026)
+
+Betreiber meldet nach Update auf 0.1.2 fehlenden Menüpunkt auf akintern.ch.
+Bestätigt: HumHub Community Edition 1.18.6. Messenger-Version, Aktivierungsstatus
+des Zusatzmoduls, PHP-Version und Audit-Tabellenzustand sind noch unbekannt.
+Die Produktionsseite wurde nicht verändert. Keine Ursache als bestätigt ausgeben.
+
+Quellvergleich 0.1.1 / 0.1.2: Events.php und config.php unverändert; Access.php
+erweitert ausschließlich die Messenger-Freigabeliste um 3.4.6. Das Menü wird bei
+nicht freigegebenem Messenger, fehlender Audit-Tabelle, fehlenden Systemadminrechten
+oder fehlender Chat-Mitgliedschaft ausgeblendet. Ein deaktiviertes Modul registriert
+seinen Event-Handler nicht.
+
+Offizieller Kern v1.18.6: 870e35a44dd8ec03c659bc698e75a9a8ec244dc3. CLAUDE.md,
+MIGRATE-DEV.md, User-Komponente und Widget-Event-Ausführung gelesen. Keine Änderung
+der verwendeten Menü-Schnittstelle. Messenger 3.3.13: offizieller Quellstand
+74c5718405e9fa4a1212d1f8fc1bf47661834231. Composer-Lock 1.18.6 / vorbereiteter
+1.18.5-Kern bytegleich; vorhandene Vendor-Abhängigkeiten für den lokalen Test kopiert.
+
+Isolierter Komponententest mit PHP 8.3.30 / MySQL 8.0.44: 36 Prüfungen bestanden.
+Zusätzlich zum bisherigen Test wird das echte Messenger-Menü-Template durch
+ConversationSettingsMenu::run gerendert und das afterRun-Event ausgelöst;
+„Teilnehmer verwalten“ ist sichtbar. Entfernung, Berechtigungen, CSRF, Rollback,
+Audit und privater Dateizugriff über echte Klassen bestanden. Kein vollständiger
+HumHub-Web-/Upgrade-Test; Fixture-Datenbank statt vollständiger Site.
+18 Controller-/Dienst-Sperrprüfungen, 16 Zugriffstests und Modul-Klassentest ebenfalls
+bestanden. Der gemeldete Fehler ist damit für 1.18.6 / 3.3.13 nicht reproduziert.
+
+Nächster notwendiger Nachweis: Messenger-Versionsnummer und Aktivierungsstatus unter
+Administration → Module auf akintern.ch. Danach gezielte Reproduktion und Korrektur;
+keine Freigabeliste oder Sicherheitsprüfung ohne Nachweis abschalten.
+
+
+### Ursache bestätigt und Korrektur vorbereitet: Messenger 3.3.15
+
+Der Betreiber meldete Messenger 3.3.15. Genau diese Version fehlt in 0.1.2 sowohl
+in isCompatible als auch im Legacy-Fallback von isAdmin (HumHub 1.18 hat keine
+getImpersonation-Methode). Beide Bedingungen blenden den Menüpunkt aus. Der
+Quellcode erklärt den beobachteten Ausfall; Aktivierung/Audit-Zustand der Site
+wurden weiterhin nicht direkt geprüft.
+
+Offizieller Messenger-Tag v3.3.15, Commit b2b1ead3356d60d6b30805fbfc1ac74c72dfdb62.
+Changelog: 3.3.14 präzisiert Validierungsregeln, 3.3.15 behebt endlose Ladeanfragen
+in Unterhaltungen ohne normale Nachrichteneinträge. Menü-Widget, Template,
+Teilnehmer-Löschpfad und Zugriffsprüfung unverändert gegenüber 3.3.13.
+Korrektur: explizit 3.3.15 in beiden Versionsprüfungen freigeben; keine pauschale
+3.3.x-Freigabe. Impersonation, Adminrechte, Mitgliedschaft, Audit, POST und CSRF
+unverändert. Tests prüfen zusätzlich 3.3.15 sowie die weiter gesperrte 3.3.16.
+
+Kandidatenkopie bestand 36 Komponenten-/DB-Prüfungen auf HumHub 1.18.6 mit
+Messenger 3.3.15 einschließlich tatsächlichem Menü-Rendering. Finalstand erneut
+prüfen und Ergebnisse beim Abschluss ergänzen. Kein Produktionszugriff, kein
+Commit/Push/Merge/Release. Modulversion bleibt bis zur Veröffentlichungsfreigabe
+0.1.2; Korrektur ist lokal auf fix/humhub-118-menu-diagnostics vorbereitet.
+
+Finalstand bestanden: HumHub 1.18.6 / Messenger 3.3.15 (36), 1.18.6 / 3.3.13
+(36), 1.18.1 / 3.3.15 (36), 1.18.5 / 3.3.13 (36), 1.19.0 / 3.4.6 (43).
+Alle Fälle ohne Fehler, jeweils mit echtem Menü-Template und isolierter Fixture-DB.
+24 Zugriffstests, 9 Berechtigungsregeln, 22 Sperrregressionen auf 1.18.6 und
+alle PHP-Syntaxprüfungen bestanden. Keine vollständige Web-/Upgrade- oder
+Produktionsprüfung behauptet.
+
+Veröffentlichung 0.1.3 am 14.10.2026 ausdrücklich freigegeben: Commit, Push, Merge und Release; kein Deployment. Nur Versionsmetadaten ergänzt, geprüfter Funktionscode unverändert.

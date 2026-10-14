@@ -39,7 +39,7 @@ function check(bool $actual, bool $expected, string $label): void {
 }
 Yii::$app = new AppDouble();
 Yii::$app->user = new CurrentUserDouble();
-foreach (['3.3.13', '3.4.5', '3.4.6'] as $version) {
+foreach (['3.3.13', '3.3.15', '3.4.5', '3.4.6'] as $version) {
     Yii::$app->mail = new MailDouble($version);
     check(Access::isCompatible(), true, 'supported version ' . $version);
     check(Access::isAdmin(), true, 'normal admin ' . $version);
@@ -60,6 +60,17 @@ check(Access::isCompatible(), false, 'missing Messenger');
 Yii::$app->user = new LegacyUserDouble();
 Yii::$app->mail = new MailDouble('3.3.13');
 check(Access::isAdmin(), true, 'legacy supported session');
+Yii::$app->mail = new MailDouble('3.3.15');
+check(Access::isAdmin(), true, 'legacy Messenger 3.3.15 session');
+Yii::$app->mail = new MailDouble('3.3.16');
+check(Access::isAdmin(), false, 'unreviewed legacy Messenger session');
+check(Access::isCompatible(), false, 'unreviewed Messenger 3.3.16');
+Yii::$app->user->identity->admin = false;
+check(Access::isAdmin(), false, 'legacy non-admin');
+Yii::$app->user->identity->admin = true;
+Yii::$app->user->isGuest = true;
+check(Access::isAdmin(), false, 'legacy guest');
+Yii::$app->user->isGuest = false;
 Yii::$app->mail = new MailDouble('3.4.5');
 check(Access::isAdmin(), false, 'new Messenger without impersonation interface');
 Yii::$app->mail = new MailDouble('3.4.6');

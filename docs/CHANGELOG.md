@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.1.3 (October 14, 2026) – Test release
+--------------------------------------
+- Fix: Allow verified Messenger 3.3.15 on HumHub 1.18, including the legacy administrator check, restoring the participant-management menu. Retain all previous versions and security checks.
+
 0.1.2 (October 13, 2026) – Test release
 --------------------------------------
 - Enh: Allow Messenger 3.4.6 after functional verification on stable HumHub 1.19.0; retain Messenger 3.3.13 and 3.4.5 support.

@@ -17,14 +17,14 @@ final class Access
             return !$user->getImpersonation()->isActive();
         }
         $mail = Yii::$app->getModule('mail');
-        return $mail !== null && $mail->getVersion() === '3.3.13';
+        return $mail !== null && in_array($mail->getVersion(), ['3.3.13', '3.3.15'], true);
     }
 
     public static function isCompatible(): bool
     {
         $mail = Yii::$app->getModule('mail');
         // Fail closed after Messenger updates until that version is verified.
-        return $mail !== null && in_array($mail->getVersion(), ['3.3.13', '3.4.5', '3.4.6'], true);
+        return $mail !== null && in_array($mail->getVersion(), ['3.3.13', '3.3.15', '3.4.5', '3.4.6'], true);
     }
 
     public static function auditReady(): bool
